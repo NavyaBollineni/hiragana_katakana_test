@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japanese Writing Practice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Ambient wave texture -->
+<div class="seigaiha" aria-hidden="true"></div>
+
+<!-- Top bar controls -->
+<div class="topbar">
+  <button id="muteToggle" class="icon-btn" title="Mute sound" aria-label="Toggle sound">
+    <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z"/></svg>
+    <svg viewBox="0 0 24 24" class="icon-sound-off" hidden><path d="M4 9v6h4l5 5V4L8 9H4z"/><line x1="16" y1="9" x2="22" y2="15" stroke="currentColor" stroke-width="1.8"/><line x1="22" y1="9" x2="16" y2="15" stroke="currentColor" stroke-width="1.8"/></svg>
+  </button>
+  <button id="darkToggle" class="icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode">
+    <svg viewBox="0 0 24 24" class="icon-moon"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg>
+    <svg viewBox="0 0 24 24" class="icon-sun" hidden><circle cx="12" cy="12" r="4.5"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.5" y1="4.5" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.5" y2="4.5"/></g></svg>
+  </button>
+</div>
+
+<!-- ===================== HOME SCREEN ===================== -->
+<main id="screen-home" class="screen active">
+  <div class="home-card fade-in">
+    <div class="hanko-mark" aria-hidden="true"><span>習</span></div>
+    <p class="eyebrow">かく・書く・practice</p>
+    <h1 class="home-title">Japanese Writing<br>Practice</h1>
+    <div class="brush-rule"></div>
+    <p class="home-subtitle">Master Hiragana &amp; Katakana through Active Recall.</p>
+    <button id="startQuizBtn" class="btn btn-primary btn-lg">
+      <span>Start Quiz</span>
+    </button>
+  </div>
+</main>
+
+<!-- ===================== SETUP MODAL ===================== -->
+<div id="setupOverlay" class="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <div class="modal-header">
+      <div class="step-dots">
+        <span class="dot active" data-dot="1"></span>
+        <span class="dot" data-dot="2"></span>
+        <span class="dot" data-dot="3"></span>
+        <span class="dot" data-dot="4"></span>
+        <span class="dot" data-dot="5"></span>
+      </div>
+      <button id="closeModalBtn" class="icon-btn close-btn" aria-label="Close">&times;</button>
+    </div>
+
+    <!-- STEP 1: Script -->
+    <section class="modal-step active" data-step="1">
+      <p class="step-label">Step 1 of 5</p>
+      <h2 id="modalTitle" class="step-title">Choose Script</h2>
+      <div class="choice-grid choice-grid-2">
+        <button class="choice-card" data-field="script" data-value="hiragana">
+          <span class="choice-glyph">あ</span>
+          <span class="choice-name">Hiragana</span>
+        </button>
+        <button class="choice-card" data-field="script" data-value="katakana">
+          <span class="choice-glyph">ア</span>
+          <span class="choice-name">Katakana</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: Mode -->
+    <section class="modal-step" data-step="2">
+      <p class="step-label">Step 2 of 5</p>
+      <h2 class="step-title">Choose Practice Mode</h2>
+      <div class="choice-grid choice-grid-1">
+        <button class="choice-card choice-row" data-field="mode" data-value="e2j">
+          <span class="choice-name">English &rarr; Japanese</span>
+          <span class="choice-desc">See "a", write あ</span>
+        </button>
+        <button class="choice-card choice-row" data-field="mode" data-value="j2e">
+          <span class="choice-name">Japanese &rarr; English</span>
+          <span class="choice-desc">See あ, write "a"</span>
+        </button>
+        <button class="choice-card choice-row" data-field="mode" data-value="mixed">
+          <span class="choice-name">Mixed Mode</span>
+          <span class="choice-desc">Random direction each question</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 3: Start Row -->
+    <section class="modal-step" data-step="3">
+      <p class="step-label">Step 3 of 5</p>
+      <h2 class="step-title">Choose Starting Row</h2>
+      <div class="choice-grid choice-grid-5" id="startRowGrid"></div>
+    </section>
+
+    <!-- STEP 4: End Row -->
+    <section class="modal-step" data-step="4">
+      <p class="step-label">Step 4 of 5</p>
+      <h2 class="step-title">Choose Ending Row</h2>
+      <div class="choice-grid choice-grid-5" id="endRowGrid"></div>
+    </section>
+
+    <!-- STEP 5: Summary -->
+    <section class="modal-step" data-step="5">
+      <p class="step-label">Step 5 of 5</p>
+      <h2 class="step-title">Ready to Practice</h2>
+      <div class="summary-card">
+        <div class="summary-row"><span>Script</span><strong id="sumScript">—</strong></div>
+        <div class="summary-row"><span>Practice Mode</span><strong id="sumMode">—</strong></div>
+        <div class="summary-row"><span>Rows</span><strong id="sumRows">—</strong></div>
+        <div class="summary-row"><span>Characters</span><strong id="sumCount">—</strong></div>
+      </div>
+      <button id="shuffleAgainBtn" class="btn btn-ghost btn-block">Shuffle Order Again</button>
+    </section>
+
+    <div class="modal-footer">
+      <button id="backBtn" class="btn btn-ghost" disabled>Back</button>
+      <button id="nextBtn" class="btn btn-primary" disabled>Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== QUIZ SCREEN ===================== -->
+<main id="screen-quiz" class="screen">
+  <div class="quiz-topline">
+    <button id="quizExitBtn" class="icon-btn" title="Finish (Esc)" aria-label="Finish">
+      <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="quiz-meta">
+      <span id="quizTimer" class="quiz-timer">00:00</span>
+      <span id="quizProgressText" class="quiz-progress-text">1 / 25</span>
+    </div>
+    <button id="fullscreenBtn" class="icon-btn" title="Fullscreen" aria-label="Fullscreen">
+      <svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+  <div class="quiz-card-wrap">
+    <div class="quiz-card fade-in" id="quizCard">
+      <p id="quizPromptLabel" class="quiz-prompt-label">Write in Japanese</p>
+      <div class="quiz-char-zone">
+        <div id="quizQuestion" class="quiz-question">あ</div>
+        <div id="hankoStamp" class="hanko-stamp">
+          <div class="hanko-stamp-circle"><span id="quizAnswer">a</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-controls">
+    <button id="prevBtn" class="btn btn-ghost" disabled>
+      <svg viewBox="0 0 24 24" class="btn-icon"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Previous
+    </button>
+    <button id="showAnswerBtn" class="btn btn-primary">Show Answer</button>
+    <button id="nextQBtn" class="btn btn-ghost">
+      Next
+      <svg viewBox="0 0 24 24" class="btn-icon"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="quiz-shortcuts">
+    <span><kbd>Space</kbd> Next</span>
+    <span><kbd>S</kbd> Show Answer</span>
+    <span><kbd>&larr;</kbd> Previous</span>
+    <span><kbd>Esc</kbd> Finish</span>
+  </div>
+</main>
+
+<!-- ===================== COMPLETE SCREEN ===================== -->
+<main id="screen-complete" class="screen">
+  <div class="home-card fade-in">
+    <div class="hanko-mark hanko-mark-complete" aria-hidden="true"><span>合格</span></div>
+    <h1 class="home-title">Congratulations!</h1>
+    <p class="home-subtitle">You completed this lesson.</p>
+    <p id="completeStats" class="complete-stats"></p>
+    <div class="complete-actions">
+      <button id="practiceAgainBtn" class="btn btn-primary btn-lg">Practice Again</button>
+      <button id="homeBtn" class="btn btn-ghost btn-lg">Home</button>
+    </div>
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
